@@ -21,6 +21,10 @@ $ cd milanuncios
 ```
 ##Execute
 
-```$ python2 anuncios.py``` 
+```
+$ python2 anuncios.py
+``` 
 or
-```$ ./anuncios.py,``` (but before check the PATH of your python2 binary)
+```
+$ ./anuncios.py
+``` (but before check the PATH of your python2 binary)
