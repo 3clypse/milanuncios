@@ -3,7 +3,7 @@
 ## Requirements
 
  * python2
- * Modules: urllib2, cookielib
+ * Modules: urllib2, cookielib, datetime
  * If you have not installed any module, do: 
  ``` # pip2 install <moduleName> ```
 
@@ -24,7 +24,7 @@ $ cd milanuncios
 ```
 $ python2 anuncios.py
 ``` 
-or
+or (but before check the PATH of your python2 binary)
 ```
 $ ./anuncios.py
-``` (but before check the PATH of your python2 binary)
+```
