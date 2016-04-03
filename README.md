@@ -1,6 +1,6 @@
 #Milanuncios autologon &amp; autoupdate items
 
-NOTE: Automatize it with crontab (for example). 
+>NOTE: Automatize it with crontab (for example). 
 
 ## Requirements
 
