@@ -1,6 +1,6 @@
-#Milanuncios autologon &amp; autoupdate items
+#Milanuncios auto-update
 
->NOTE: Automatize it with crontab (for example). 
+>NOTE: Automatize with crontab (for example). 
 
 ## Requirements
 
@@ -21,12 +21,12 @@ Or using git
 $ git clone https://github.com/3clypse/milanuncios.git
 $ cd milanuncios
 ```
-##Execute
+
+Edit 'anuncios.py' with your data
+
+## Execute
 
 ```
 $ python2 anuncios.py
 ``` 
-or (but before check the PATH of your python2 binary)
-```
-$ ./anuncios.py
-```
+
