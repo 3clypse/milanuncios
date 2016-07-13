@@ -56,7 +56,8 @@ def get_advertisement_values(cookie, advertisement_id):
     ofuscated_code = ofuscated_code[1].decode('unicode-escape')
     short_hashes = re.findall("[a-z0-9]{32}", ofuscated_code)
     long_hash = re.findall("[a-z0-9]{96}", ofuscated_code)
-    return short_hashes[1].encode('utf-8'), short_hashes[0].encode('utf-8'), long_hash[0].encode('utf-8')
+    return (short_hashes[1].encode('utf-8'),
+        short_hashes[0].encode('utf-8'), long_hash[0].encode('utf-8'))
 
 def renew(cookie, advertisement_values, advertisement_id):
     payload['renew']['a'] = advertisement_values[0]
