@@ -1,6 +1,6 @@
-#Milanuncios
+#Autorenovación MIL ANUNCIOS.com
 
-Autorenovación de anuncios de milanuncio.com.
+Autorenovación de anuncios de [MIL ANUNCIOS.com] (http://www.milanuncios.com/).
 
 ## Prequisitos
 
@@ -13,7 +13,7 @@ Autorenovación de anuncios de milanuncio.com.
 - Ejecutar el script:
 
 ```
-$ python renew.py
+python renew.py
 ```
 
 Una forma de automatizar el proceso es añadir una tarea cron cada 24 horas.
