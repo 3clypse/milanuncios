@@ -1,32 +1,19 @@
-#Milanuncios auto-update
+#Autorenovación MIL ANUNCIOS.com
 
->NOTE: Automatize with crontab (for example). 
+Autorenovación de anuncios de [MIL ANUNCIOS.com] (http://www.milanuncios.com/).
 
-## Requirements
+## Prequisitos
 
- * python2
- * Modules: urllib2, cookielib, datetime
- * If you have not installed any module, do: 
- ``` # pip2 install <moduleName> ```
+ * Python 2.7
+ * [requests] (http://docs.python-requests.org/)
 
-## Download
+## Uso
 
-```
-$ wget https://raw.githubusercontent.com/3clypse/milanuncios/master/anuncios.py
-```
-
-Or using git
+- Añade tus credenciales en las claves *email* y *contra* del diccionario *payload*.
+- Ejecutar el script:
 
 ```
-$ git clone https://github.com/3clypse/milanuncios.git
-$ cd milanuncios
+python renew.py
 ```
 
-Edit 'anuncios.py' with your data
-
-## Execute
-
-```
-$ python2 anuncios.py
-``` 
-
+Una forma de automatizar el proceso es añadir una tarea cron cada 24 horas.
