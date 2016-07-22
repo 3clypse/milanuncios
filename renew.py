@@ -3,6 +3,7 @@
 
 import re
 import requests
+import datetime
 
 url = {
     'login': 'http://www.milanuncios.com/cmd/',
@@ -14,8 +15,8 @@ url = {
 payload = {
     'login': {
         'comando': 'login',
-        'email': 'mi@email.com',
-        'contra': 'mi_contraseña',
+        'email': 'YOUR@EMAIL.COM',
+        'contra': 'TU CONTRASEÑA',
         'rememberme': 's'
     },
     'advertisement_values': {
@@ -31,10 +32,13 @@ payload = {
 }
 
 renew_responses = {
-    'renovado': 'Artículo renovado.',
-    'pronto': 'Debes esperar 24h entre cada renovación.',
-    'error': 'Error renovando el artículo.'
+    'renovado': 'Anuncio renovado.',
+    'pronto': 'Aún es pronto, debes esperar 24h entre cada renovación.',
+    'error': 'Error renovando el anuncio.'
 }
+
+def timeStamped(fname = "", fmt = '%d/%m/%Y | %H:%M:%S'):
+    return datetime.datetime.now().strftime(fmt).format(fname = fname)
 
 def login():
     response = requests.get(url['login'], params=payload['login'])
@@ -72,18 +76,16 @@ def main():
     if not cookie.values():
         print 'No se pudo iniciar sesión. Comprueba las credenciales.'
     else:
-        print 'Obteniendo anuncios...'
         ids = get_advertisements_id(cookie)
         number_advertisements = len(ids)
         if number_advertisements == 0:
             print 'No tienes anuncios.'
         else:
-            print '%d anuncios obtenidos.' % number_advertisements
+            print '%d anuncios obtenidos:' % number_advertisements
             for id in ids:
                 values = get_advertisement_values(cookie, id)
-                print 'Renovando anuncio con referencia %s' % id
                 response = renew(cookie, values, id)
-                print renew_responses.get(response, 'error')
+                print '[' + timeStamped() + '] Anuncio con referencia %s' % id + '    -    ' + renew_responses.get(response, 'error')
 
 if __name__ == "__main__":
     main()
