@@ -55,11 +55,11 @@ def get_advertisement_values(cookie, advertisement_id):
         url['advertisement_values'],
         params=payload['advertisement_values'],
         cookies=cookie)
-    ofuscated_code = re.findall(
+    obfuscated_code = re.findall(
         "(?<=unescape\(')(.+?)(?=')", response.text)
-    ofuscated_code = ofuscated_code[1].decode('unicode-escape')
-    short_hashes = re.findall("[a-z0-9]{32}", ofuscated_code)
-    long_hash = re.findall("[a-z0-9]{96}", ofuscated_code)
+    obfuscated_code = obfuscated_code[1].decode('unicode-escape')
+    short_hashes = re.findall("[a-z0-9]{32}", obfuscated_code)
+    long_hash = re.findall("[a-z0-9]{96}", obfuscated_code)
     return (short_hashes[1].encode('utf-8'),
         short_hashes[0].encode('utf-8'), long_hash[0].encode('utf-8'))
 
@@ -74,18 +74,21 @@ def renew(cookie, advertisement_values, advertisement_id):
 def main():
     cookie = login()
     if not cookie.values():
-        print 'No se pudo iniciar sesión. Comprueba las credenciales.'
+        print '[' + timeStamped() + '] No se pudo iniciar sesión. Comprueba' \
+            ' las credenciales.'
     else:
         ids = get_advertisements_id(cookie)
         number_advertisements = len(ids)
         if number_advertisements == 0:
-            print 'No tienes anuncios.'
+            print '[' + timeStamped() + '] No tienes anuncios.'
         else:
-            print '%d anuncios obtenidos:' % number_advertisements
+            print '[' + timeStamped() + '] %d anuncios obtenidos:' \
+                % number_advertisements
             for id in ids:
                 values = get_advertisement_values(cookie, id)
                 response = renew(cookie, values, id)
-                print '[' + timeStamped() + '] Anuncio con referencia %s' % id + '    -    ' + renew_responses.get(response, 'error')
+                print '[' + timeStamped() + '] Anuncio con referencia %s' \
+                    % id + ' - ' + renew_responses.get(response, 'error')
 
 if __name__ == "__main__":
     main()
