@@ -4,6 +4,8 @@
 
 Autorenovación de anuncios de [MIL ANUNCIOS.com] (http://www.milanuncios.com/).
 
+## NO. No permitimos un uso comercial! 
+
 ## Prequisitos
 
  * Python 2.7 o python 3.5
@@ -25,3 +27,4 @@ python renew.py
 ```
 
 Una forma de automatizar el proceso es añadir una tarea cron cada 24 horas.
+
