@@ -58,8 +58,6 @@ def waituntil():
     rnd = random.randint(5, 60)
     time.sleep(rnd)
 
-
-
 def get_advertisement_values(cookie, advertisement_id):
     payload['advertisement_values']['id'] = advertisement_id
     response = requests.get(
