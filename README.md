@@ -4,7 +4,7 @@
 
 Autorenovación de anuncios de [MIL ANUNCIOS.com] (http://www.milanuncios.com/).
 
-## NO. No commercial use allowed! 
+## NO. No permitimos un uso comercial! 
 
 ## Prequisitos
 
