@@ -18,8 +18,8 @@ URL = {
 PAYLOAD = {
     'login': {
         'comando': 'login',
-        'email': 'gmz2006@gmail.com',
-        'contra': 'zk7b',
+        'email': 'TU@EMAIL.COM',
+        'contra': 'TUCONTRASENA',
         'rememberme': 's'
     },
     'advertisement_values': {
