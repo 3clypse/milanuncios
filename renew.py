@@ -4,6 +4,8 @@
 import re
 import requests
 import datetime
+import random
+import time
 
 url = {
     'login': 'http://www.milanuncios.com/cmd/',
@@ -52,6 +54,9 @@ def get_advertisements_id(cookie):
     return re.findall(
         "(?<=\?idanuncio=)(\d{9})(?=&)", response.text.encode('utf-8'))
 
+def waituntil():
+    rnd = random.randint(5, 60)
+    time.sleep(rnd)
 
 def get_advertisement_values(cookie, advertisement_id):
     payload['advertisement_values']['id'] = advertisement_id
@@ -91,10 +96,17 @@ def main():
             print '[' + timeStamped() + '] %d anuncios obtenidos:' \
                 % number_advertisements
             for id in ids:
-                values = get_advertisement_values(cookie, id)
-                response = renew(cookie, values, id)
-                print '[' + timeStamped() + '] Anuncio con referencia %s' \
-                    % id + ' - ' + renew_responses.get(response, 'error')
+                if ids.index(id) == 0:
+                    values = get_advertisement_values(cookie, id)
+                    response = renew(cookie, values, id)
+                    print '[' + timeStamped() + '] Anuncio con referencia %s' \
+                                                % id + ' - ' + renew_responses.get(response, 'error')
+                else:
+                    waituntil()
+                    values = get_advertisement_values(cookie, id)
+                    response = renew(cookie, values, id)
+                    print '[' + timeStamped() + '] Anuncio con referencia %s' \
+                                                % id + ' - ' + renew_responses.get(response, 'error')
 
 if __name__ == "__main__":
     main()
