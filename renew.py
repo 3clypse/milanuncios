@@ -1,73 +1,73 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 import datetime
 import random
+import time
 import re
 import requests
-import time
 
-url = {
+URL = {
     'login': 'http://www.milanuncios.com/cmd/',
     'advertisements_list': 'http://www.milanuncios.com/mis-anuncios/',
     'advertisement_values': 'http://www.milanuncios.com/renovar/',
     'renew': 'http://www.milanuncios.com/renovado/'
 }
 
-payload = {
+PAYLOAD = {
     'login': {
         'comando': 'login',
-        'email': 'YOUR@EMAIL.COM',
-        'contra': 'TU CONTRASEÑA',
+        'email': 'gmz2006@gmail.com',
+        'contra': 'zk7b',
         'rememberme': 's'
     },
     'advertisement_values': {
-        'id': None
+        'id_advertisement': None
     },
     'renew': {
         'comando': 'renovar',
         'a': None,
         't': None,
         'u': None,
-        'id': None
+        'id_advertisement': None
     }
 }
 
-renew_responses = {
+RENEW_RESPONSE = {
     'renovado': 'Anuncio renovado.',
     'pronto': 'Aún es pronto, debes esperar 24h entre cada renovación.',
     'error': 'Error renovando el anuncio.'
 }
 
 
-def timeStamped(fname="", fmt='%d/%m/%Y | %H:%M:%S'):
+def time_stamped(fname="", fmt='%d/%m/%Y | %H:%M:%S'):
     return datetime.datetime.now().strftime(fmt).format(fname=fname)
 
 
 def login():
-    response = requests.get(url['login'], params=payload['login'])
+    response = requests.get(URL['login'], params=PAYLOAD['login'])
     return response.cookies
 
 
 def get_advertisements_id(cookie):
-    response = requests.get(url['advertisements_list'], cookies=cookie)
+    response = requests.get(URL['advertisements_list'], cookies=cookie)
     return re.findall(
-        "(?<=\?idanuncio=)(\d{9})(?=&)", response.text.encode('utf-8'))
+        r"(?<=\?idanuncio=)(\d{9})(?=&)", response.text.encode('utf-8'))
 
 
-def waitUntil():
+def wait_until():
     rnd = random.randint(5, 60)
     time.sleep(rnd)
 
 
 def get_advertisement_values(cookie, advertisement_id):
-    payload['advertisement_values']['id'] = advertisement_id
+    PAYLOAD['advertisement_values']['id_advertisement'] = advertisement_id
     response = requests.get(
-        url['advertisement_values'],
-        params=payload['advertisement_values'],
+        URL['advertisement_values'],
+        params=PAYLOAD['advertisement_values'],
         cookies=cookie)
-    obfuscated_code = re.findall(
-        "(?<=unescape\(')(.+?)(?=')", response.text)
+    obfuscated_code = re.findall(r"(?<=unescape\(')(.+?)(?=')", response.text)
     obfuscated_code = obfuscated_code[1].decode('unicode-escape')
     short_hashes = re.findall("[a-z0-9]{32}", obfuscated_code)
     long_hash = re.findall("[a-z0-9]{96}", obfuscated_code)
@@ -76,39 +76,41 @@ def get_advertisement_values(cookie, advertisement_id):
 
 
 def renew(cookie, advertisement_values, advertisement_id):
-    payload['renew']['a'] = advertisement_values[0]
-    payload['renew']['u'] = advertisement_values[1]
-    payload['renew']['t'] = advertisement_values[2]
-    payload['renew']['id'] = advertisement_id
-    response = requests.get(url['renew'], payload['renew'], cookies=cookie)
+    PAYLOAD['renew']['a'] = advertisement_values[0]
+    PAYLOAD['renew']['u'] = advertisement_values[1]
+    PAYLOAD['renew']['t'] = advertisement_values[2]
+    PAYLOAD['renew']['id_advertisement'] = advertisement_id
+    response = requests.get(URL['renew'], PAYLOAD['renew'], cookies=cookie)
     return response.text
 
 
 def main():
     cookie = login()
     if not cookie.values():
-        print('[' + timeStamped() + '] No se pudo iniciar sesión. Comprueba'
+        print('[' + time_stamped() + '] No se pudo iniciar sesión. Comprueba'
               ' las credenciales.')
     else:
-        ids = get_advertisements_id(cookie)
-        number_advertisements = len(ids)
+        id_advertisements = get_advertisements_id(cookie)
+        number_advertisements = len(id_advertisements)
         if number_advertisements == 0:
-            print('[' + timeStamped() + '] No tienes anuncios.')
+            print('[' + time_stamped() + '] No tienes anuncios.')
         else:
-            print('[' + timeStamped() + '] %d anuncios obtenidos:'
+            print('[' + time_stamped() + '] %d anuncios obtenidos:'
                   % number_advertisements)
-            for id in ids:
-                if ids.index(id) == 0:
-                    values = get_advertisement_values(cookie, id)
-                    response = renew(cookie, values, id)
-                    print('[' + timeStamped() + '] Anuncio con referencia %s'
-                          % id + ' - ' + renew_responses.get(response, 'error'))
+            for id_advertisement in id_advertisements:
+                if id_advertisements.index(id_advertisement) == 0:
+                    values = get_advertisement_values(cookie, id_advertisement)
+                    response = renew(cookie, values, id_advertisement)
+                    print('[' + time_stamped() + '] Anuncio con referencia %s'
+                          % id_advertisement + ' - ' +
+                          RENEW_RESPONSE.get(response, 'error'))
                 else:
-                    waitUntil()
-                    values = get_advertisement_values(cookie, id)
-                    response = renew(cookie, values, id)
-                    print('[' + timeStamped() + '] Anuncio con referencia %s'
-                          % id + ' - ' + renew_responses.get(response, 'error'))
+                    wait_until()
+                    values = get_advertisement_values(cookie, id_advertisement)
+                    response = renew(cookie, values, id_advertisement)
+                    print('[' + time_stamped() + '] Anuncio con referencia %s'
+                          % id_advertisement + ' - ' +
+                          RENEW_RESPONSE.get(response, 'error'))
 
 if __name__ == "__main__":
     main()

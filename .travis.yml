@@ -1,3 +1,7 @@
 language: python
-install: "pip install nose pylint"
-script: "nosetests && pylint"
+    - "2.7"
+    - "3.5"
+install:
+    - pip install --user -r requirements.txt
+    - pip install --user pylint
+script: "pylint --disable=missing-docstring renew.py"
