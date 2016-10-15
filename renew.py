@@ -54,9 +54,11 @@ def get_advertisements_id(cookie):
     return re.findall(
         "(?<=\?idanuncio=)(\d{9})(?=&)", response.text.encode('utf-8'))
 
-def waituntil():
+
+def waitUntil():
     rnd = random.randint(5, 60)
     time.sleep(rnd)
+
 
 def get_advertisement_values(cookie, advertisement_id):
     payload['advertisement_values']['id'] = advertisement_id
@@ -85,28 +87,28 @@ def renew(cookie, advertisement_values, advertisement_id):
 def main():
     cookie = login()
     if not cookie.values():
-        print '[' + timeStamped() + '] No se pudo iniciar sesión. Comprueba' \
-            ' las credenciales.'
+        print('[' + timeStamped() + '] No se pudo iniciar sesión. Comprueba'
+              ' las credenciales.')
     else:
         ids = get_advertisements_id(cookie)
         number_advertisements = len(ids)
         if number_advertisements == 0:
-            print '[' + timeStamped() + '] No tienes anuncios.'
+            print('[' + timeStamped() + '] No tienes anuncios.')
         else:
-            print '[' + timeStamped() + '] %d anuncios obtenidos:' \
-                % number_advertisements
+            print('[' + timeStamped() + '] %d anuncios obtenidos:'
+                  % number_advertisements)
             for id in ids:
                 if ids.index(id) == 0:
                     values = get_advertisement_values(cookie, id)
                     response = renew(cookie, values, id)
-                    print '[' + timeStamped() + '] Anuncio con referencia %s' \
-                                                % id + ' - ' + renew_responses.get(response, 'error')
+                    print('[' + timeStamped() + '] Anuncio con referencia %s'
+                          % id + ' - ' + renew_responses.get(response, 'error'))
                 else:
-                    waituntil()
+                    waitUntil()
                     values = get_advertisement_values(cookie, id)
                     response = renew(cookie, values, id)
-                    print '[' + timeStamped() + '] Anuncio con referencia %s' \
-                                                % id + ' - ' + renew_responses.get(response, 'error')
+                    print('[' + timeStamped() + '] Anuncio con referencia %s'
+                          % id + ' - ' + renew_responses.get(response, 'error'))
 
 if __name__ == "__main__":
     main()
