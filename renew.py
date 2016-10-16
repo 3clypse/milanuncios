@@ -63,7 +63,9 @@ def get_advertisements_id(cookie):
 
 
 def wait_until():
-    rnd = random.randint(5, 60)
+    rnd = random.randint(3, 10)
+    print('[' + time_stamped() + '] Esperando ' + str(rnd) +
+          ' segundos para renovar.')
     time.sleep(rnd)
 
 
@@ -104,19 +106,12 @@ def main():
             print('[' + time_stamped() + '] %d anuncios obtenidos:'
                   % number_advertisements)
             for id_advertisement in id_advertisements:
-                if id_advertisements.index(id_advertisement) == 0:
-                    values = get_advertisement_values(cookie, id_advertisement)
-                    response = renew(cookie, values, id_advertisement)
-                    print('[' + time_stamped() + '] Anuncio con referencia %s'
-                          % id_advertisement + ' - ' +
-                          RENEW_RESPONSE.get(response, 'error'))
-                else:
-                    wait_until()
-                    values = get_advertisement_values(cookie, id_advertisement)
-                    response = renew(cookie, values, id_advertisement)
-                    print('[' + time_stamped() + '] Anuncio con referencia %s'
-                          % id_advertisement + ' - ' +
-                          RENEW_RESPONSE.get(response, 'error'))
+                wait_until()
+                values = get_advertisement_values(cookie, id_advertisement)
+                response = renew(cookie, values, id_advertisement)
+                print('[' + time_stamped() + '] Anuncio con referencia %s'
+                      % id_advertisement + ' - ' +
+                      RENEW_RESPONSE.get(response, 'error'))
 
 if __name__ == "__main__":
     main()
