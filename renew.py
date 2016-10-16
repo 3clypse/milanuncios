@@ -3,12 +3,12 @@
 
 
 from __future__ import print_function
-from dotenv import load_dotenv, find_dotenv
 import datetime
 import os
 import random
 import time
 import re
+from dotenv import load_dotenv, find_dotenv
 import requests
 
 load_dotenv(find_dotenv())
