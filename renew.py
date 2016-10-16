@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from __future__ import print_function
+from dotenv import load_dotenv, find_dotenv
 import datetime
+import os
 import random
 import time
 import re
 import requests
+
+load_dotenv(find_dotenv())
 
 URL = {
     'login': 'http://www.milanuncios.com/cmd/',
@@ -15,22 +20,23 @@ URL = {
     'renew': 'http://www.milanuncios.com/renovado/'
 }
 
+
 PAYLOAD = {
     'login': {
         'comando': 'login',
-        'email': 'TU@EMAIL.COM',
-        'contra': 'TUCONTRASENA',
+        'email': os.environ.get("EMAIL"),
+        'contra': os.environ.get("PASSWORD"),
         'rememberme': 's'
     },
     'advertisement_values': {
-        'id_advertisement': None
+        'id': None
     },
     'renew': {
         'comando': 'renovar',
         'a': None,
         't': None,
         'u': None,
-        'id_advertisement': None
+        'id': None
     }
 }
 
@@ -52,8 +58,8 @@ def login():
 
 def get_advertisements_id(cookie):
     response = requests.get(URL['advertisements_list'], cookies=cookie)
-    return re.findall(
-        r"(?<=\?idanuncio=)(\d{9})(?=&)", response.text.encode('utf-8'))
+    return re.findall(r"(?<=\?idanuncio=)(\d{9})(?=&)",
+                      response.text.encode('utf-8'))
 
 
 def wait_until():
@@ -62,7 +68,7 @@ def wait_until():
 
 
 def get_advertisement_values(cookie, advertisement_id):
-    PAYLOAD['advertisement_values']['id_advertisement'] = advertisement_id
+    PAYLOAD['advertisement_values']['id'] = advertisement_id
     response = requests.get(
         URL['advertisement_values'],
         params=PAYLOAD['advertisement_values'],
@@ -79,7 +85,7 @@ def renew(cookie, advertisement_values, advertisement_id):
     PAYLOAD['renew']['a'] = advertisement_values[0]
     PAYLOAD['renew']['u'] = advertisement_values[1]
     PAYLOAD['renew']['t'] = advertisement_values[2]
-    PAYLOAD['renew']['id_advertisement'] = advertisement_id
+    PAYLOAD['renew']['id'] = advertisement_id
     response = requests.get(URL['renew'], PAYLOAD['renew'], cookies=cookie)
     return response.text
 
