@@ -19,7 +19,7 @@ sudo pip install -r requirements.txt
 
 ## Uso
 
-- Añade tus credenciales en las claves *email* y *contra* del diccionario *payload*.
+- Añade tus credenciales en el fichero '.env'.
 - Ejecutar el script:
 
 ```
