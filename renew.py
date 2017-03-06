@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-from __future__ import print_function
 import datetime
 import os
 import random
@@ -12,6 +11,8 @@ from dotenv import load_dotenv, find_dotenv
 import requests
 
 load_dotenv(find_dotenv())
+
+DEBUG_MODE = True if os.environ.get('DEBUG') == 'True' else False
 
 URL = {
     'login': 'http://www.milanuncios.com/cmd/',
@@ -24,8 +25,8 @@ URL = {
 PAYLOAD = {
     'login': {
         'comando': 'login',
-        'email': os.environ.get("EMAIL"),
-        'contra': os.environ.get("PASSWORD"),
+        'email': os.environ.get('EMAIL'),
+        'contra': os.environ.get('PASSWORD'),
         'rememberme': 's'
     },
     'advertisement_values': {
@@ -76,7 +77,11 @@ def get_advertisement_values(cookie, advertisement_id):
         params=PAYLOAD['advertisement_values'],
         cookies=cookie)
     obfuscated_code = re.findall(r"(?<=unescape\(')(.+?)(?=')", response.text)
-    obfuscated_code = obfuscated_code[1].decode('unicode-escape')
+    try:
+        obfuscated_code = obfuscated_code[1].decode('unicode-escape')
+    except IndexError:
+        print('Error al acceder al índice. Cerrando el programa...')
+        exit()
     short_hashes = re.findall("[a-z0-9]{32}", obfuscated_code)
     long_hash = re.findall("[a-z0-9]{96}", obfuscated_code)
     return (short_hashes[1].encode('utf-8'), short_hashes[0].encode('utf-8'),
@@ -98,19 +103,22 @@ def main():
         print('[' + time_stamped() + '] No se pudo iniciar sesión. Comprueba'
               ' las credenciales.')
     else:
-        id_advertisements = get_advertisements_id(cookie)
-        number_advertisements = len(id_advertisements)
+        advertisements_id = get_advertisements_id(cookie)
+        number_advertisements = len(advertisements_id)
         if number_advertisements == 0:
             print('[' + time_stamped() + '] No tienes anuncios.')
         else:
             print('[' + time_stamped() + '] %d anuncios obtenidos:'
                   % number_advertisements)
-            for id_advertisement in id_advertisements:
-                wait_until()
-                values = get_advertisement_values(cookie, id_advertisement)
-                response = renew(cookie, values, id_advertisement)
+            for advertisement_id in advertisements_id:
+                if not DEBUG_MODE and number_advertisements > 1:
+                    wait_until()
+                values = get_advertisement_values(cookie, advertisement_id)
+                if DEBUG_MODE:
+                    print(values)
+                response = renew(cookie, values, advertisement_id)
                 print('[' + time_stamped() + '] Anuncio con referencia %s'
-                      % id_advertisement + ' - ' +
+                      % advertisement_id + ' - ' +
                       RENEW_RESPONSE.get(response, 'error'))
 
 if __name__ == "__main__":
