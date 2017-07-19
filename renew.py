@@ -16,7 +16,7 @@ load_dotenv(find_dotenv())
 DEBUG_MODE = True if os.environ.get('DEBUG') == 'True' else False
 
 URL = {
-    'login': 'http://www.milanuncios.com/cmd/',
+    'login': 'https://www.milanuncios.com/cmd/',
     'advertisements_list': 'http://www.milanuncios.com/mis-anuncios/',
     'advertisement_values': 'http://www.milanuncios.com/renovar/',
     'renew': 'http://www.milanuncios.com/renovado/'
@@ -54,7 +54,7 @@ def time_stamped(fname="", fmt='%d/%m/%Y | %H:%M:%S'):
 
 
 def login():
-    response = requests.get(URL['login'], params=PAYLOAD['login'])
+    response = requests.post(URL['login'], data=PAYLOAD['login'])
     return response.cookies
 
 
