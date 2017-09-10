@@ -14,7 +14,7 @@ Autorenovación de anuncios de [MIL ANUNCIOS.com](http://www.milanuncios.com/).
 ## Instalación
 
 ```
-sudo pip install -r requirements.txt
+sudo pip2 install -r requirements.txt
 ```
 
 ## Uso
@@ -24,7 +24,7 @@ sudo pip install -r requirements.txt
 -   Ejecuta el script:
 
 ```
-python renew.py
+python2 renew.py
 ```
 
 Una forma de automatizar el proceso es añadir una tarea cron cada 24 horas.

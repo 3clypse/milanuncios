@@ -6,12 +6,16 @@ from __future__ import print_function
 import datetime
 import os
 import random
-import time
 import re
-from dotenv import load_dotenv, find_dotenv
+import time
 import requests
+from dotenv import load_dotenv, find_dotenv
+from fake_useragent import UserAgent
+
 
 load_dotenv(find_dotenv())
+USER_AGENT = UserAgent()
+HEADER = {'User-Agent': str(USER_AGENT.random)}
 
 DEBUG_MODE = True if os.environ.get('DEBUG') == 'True' else False
 
@@ -54,12 +58,18 @@ def time_stamped(fname="", fmt='%d/%m/%Y | %H:%M:%S'):
 
 
 def login():
-    response = requests.post(URL['login'], data=PAYLOAD['login'])
+    response = requests.post(URL['login'], data=PAYLOAD['login'],
+                             headers=HEADER)
+    if DEBUG_MODE:
+        print(PAYLOAD['login'])
+        print(response.text)
+
     return response.cookies
 
 
 def get_advertisements_id(cookie):
-    response = requests.get(URL['advertisements_list'], cookies=cookie)
+    response = requests.get(URL['advertisements_list'], cookies=cookie,
+                            headers=HEADER)
     return re.findall(r"(?<=\?idanuncio=)(\d{9})(?=&)",
                       response.text.encode('utf-8'))
 
@@ -76,6 +86,7 @@ def get_advertisement_values(cookie, advertisement_id):
     response = requests.get(
         URL['advertisement_values'],
         params=PAYLOAD['advertisement_values'],
+        headers=HEADER,
         cookies=cookie)
     obfuscated_code = re.findall(r"(?<=unescape\(')(.+?)(?=')", response.text)
     try:
@@ -94,7 +105,8 @@ def renew(cookie, advertisement_values, advertisement_id):
     PAYLOAD['renew']['u'] = advertisement_values[1]
     PAYLOAD['renew']['t'] = advertisement_values[2]
     PAYLOAD['renew']['id'] = advertisement_id
-    response = requests.get(URL['renew'], PAYLOAD['renew'], cookies=cookie)
+    response = requests.get(URL['renew'], PAYLOAD['renew'], cookies=cookie,
+                            headers=HEADER)
     return response.text
 
 
