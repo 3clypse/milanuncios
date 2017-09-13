@@ -13,9 +13,15 @@ from dotenv import load_dotenv, find_dotenv
 from fake_useragent import UserAgent
 
 
+__author__ = "3clypse"
+__copyright__ = "Copyright 2017"
+__credits__ = ["3clypse", "jesuGMZ"]
+__license__ = "GPL"
+__version__ = "2.0"
+
+
 load_dotenv(find_dotenv())
 USER_AGENT = UserAgent()
-HEADER = {'User-Agent': str(USER_AGENT.random)}
 
 DEBUG_MODE = True if os.environ.get('DEBUG') == 'True' else False
 
@@ -51,6 +57,8 @@ RENEW_RESPONSE = {
     'pronto': 'Aún es pronto, debes esperar 24h entre cada renovación.',
     'error': 'Error renovando el anuncio.'
 }
+
+HEADER = {'User-Agent': str(USER_AGENT.random)}
 
 
 def time_stamped(fname="", fmt='%d/%m/%Y | %H:%M:%S'):
@@ -134,5 +142,14 @@ def main():
                       % advertisement_id + ' - ' +
                       RENEW_RESPONSE.get(response, 'error'))
 
+
+def header():
+    print("============================================")
+    print("By: %s" % __credits__)
+    print(__copyright__)
+    print("============================================")
+
+
 if __name__ == "__main__":
+    header()
     main()
