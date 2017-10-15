@@ -58,7 +58,7 @@ RENEW_RESPONSE = {
     'error': 'Error renovando el anuncio.'
 }
 
-HEADER = {'User-Agent': str(USER_AGENT.random)}
+HEADER = {'User-Agent': str(USER_AGENT.chrome)}
 
 
 def time_stamped(fname="", fmt='%d/%m/%Y | %H:%M:%S'):
@@ -70,6 +70,7 @@ def login():
                              headers=HEADER)
     if DEBUG_MODE:
         print(PAYLOAD['login'])
+        print(HEADER)
         print(response.text)
 
     return response.cookies

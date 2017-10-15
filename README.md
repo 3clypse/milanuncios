@@ -30,6 +30,8 @@ python2 renew.py
 
 Una forma de automatizar el proceso es añadir una tarea cron cada 24 horas.
 
+**AVISO: Usar 1 sóla vez cada 24h o tendréis un error.**
+
 
 ## Autores
 
