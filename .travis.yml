@@ -1,7 +1,7 @@
 language: python
     - "2.7"
-    - "3.5"
+    - "3.8"
 install:
-    - pip install --user -r requirements.txt
-    - pip install --user pylint
+    - pip install -r requirements.txt
+    - pip install pylint
 script: "pylint --disable=missing-docstring renew.py"
